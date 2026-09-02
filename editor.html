@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio Editor</title>
+<style>
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Arial,'Microsoft YaHei',sans-serif;background:#0f0f10;color:#eee;overflow:hidden}.bar{min-height:68px;display:flex;align-items:center;gap:9px;padding:10px 14px;background:#181819;border-bottom:1px solid #323234;position:relative;z-index:5;flex-wrap:wrap}.bar strong{margin-right:auto;white-space:nowrap}.bar select,.bar button,.image-panel select,.image-panel input[type="range"]{font:inherit}.bar select,.bar button{border:1px solid #444448;background:#252527;color:#eee;padding:9px 11px;border-radius:7px;font-size:13px}.bar button{cursor:pointer}.bar button:hover{border-color:#666}.bar button.primary{background:#f0eee8;color:#111;border-color:#f0eee8}.bar button.active{background:#45403a;border-color:#807465}.bar button:disabled{opacity:.38;cursor:not-allowed}.group{display:flex;gap:6px;align-items:center}.status{font-size:12px;color:#aaa;min-width:68px}.status.editing{color:#d6bd7b}.status.saved{color:#9ac6a4}.hint{font-size:11px;color:#898989;flex-basis:100%;text-align:right;margin-top:-3px}.workspace{height:calc(100vh - 91px);display:flex;align-items:stretch;padding:12px;background:#0b0b0c;gap:12px;overflow:hidden}.preview-area{min-width:0;flex:1;display:flex;justify-content:center;overflow:auto}.preview-shell{height:100%;width:100%;max-width:none;background:#fff;box-shadow:0 0 0 1px #292929;transition:width .25s ease;border-radius:4px;overflow:hidden}.preview-shell.tablet{width:820px}.preview-shell.mobile{width:390px}.frame{width:100%;height:100%;border:0;background:white}.image-panel{width:320px;flex:0 0 320px;background:#181819;border:1px solid #323234;border-radius:8px;padding:15px;overflow:auto;display:none}.image-panel.open{display:block}.image-panel h2{font-size:16px;margin:0 0 4px}.panel-sub{font-size:11px;color:#8f8f93;margin:0 0 16px;line-height:1.55}.field{margin:0 0 16px}.field label{display:block;font-size:12px;color:#bbb;margin-bottom:7px}.field select{width:100%;border:1px solid #444448;background:#252527;color:#eee;padding:9px;border-radius:6px}.field input[type="range"]{width:100%;accent-color:#d6bd7b}.range-row{display:grid;grid-template-columns:1fr 44px;gap:8px;align-items:center}.range-value{font-size:12px;text-align:right;color:#d3d3d3}.image-preview{aspect-ratio:16/10;background:#09090a;border:1px solid #333;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:15px}.image-preview img{max-width:100%;max-height:100%;object-fit:contain}.path-box{font-family:Consolas,monospace;font-size:11px;line-height:1.5;color:#aaa;background:#101011;border:1px solid #303033;border-radius:6px;padding:9px;word-break:break-all}.image-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.image-actions button,.file-button{border:1px solid #444448;background:#252527;color:#eee;padding:9px 10px;border-radius:6px;font-size:12px;cursor:pointer}.image-actions button:hover,.file-button:hover{border-color:#666}.file-button{display:block;text-align:center}.file-button input{display:none}.image-warning{font-size:11px;color:#c5a879;line-height:1.55;margin-top:12px}.empty-panel{color:#8f8f93;font-size:12px;line-height:1.7;padding-top:8px}.mode-image .hint{color:#c5a879}@media(max-width:1080px){.image-panel{width:280px;flex-basis:280px}}@media(max-width:880px){.bar strong{width:100%}.hint{display:none}.workspace{height:calc(100vh - 112px)}.preview-shell.tablet,.preview-shell.mobile{width:100%}.device{display:none}.image-panel{position:absolute;right:12px;top:124px;bottom:12px;z-index:6;width:min(330px,calc(100vw - 24px));box-shadow:0 18px 50px rgba(0,0,0,.45)}}
+</style></head>
+<body>
+<div class="bar">
+  <strong>作品集编辑器</strong>
+  <select id="pageSelect" aria-label="选择页面">
+    <option value="index.html">首页</option>
+    <option value="khan-bong.html">牵魂</option>
+    <option value="gullen-theatre.html">居伦剧院</option>
+    <option value="six-mornings.html">6 Mornings</option>
+    <option value="rigged-champion.html">假赛拳王</option>
+    <option value="anthropolo.html">ANTHROPOLO</option>
+  </select>
+  <div class="group" aria-label="编辑模式">
+    <button id="textMode" type="button" class="active">文字模式</button>
+    <button id="imageMode" type="button">图片模式</button>
+  </div>
+  <div class="group device" aria-label="预览尺寸">
+    <button type="button" data-device="desktop" class="active">桌面</button>
+    <button type="button" data-device="tablet">平板</button>
+    <button type="button" data-device="mobile">手机</button>
+  </div>
+  <button id="toggleEdit" class="primary" type="button">开始编辑文字</button>
+  <div class="group text-tools">
+    <button id="undo" type="button" disabled>撤销</button>
+    <button id="redo" type="button" disabled>重做</button>
+  </div>
+  <button id="resetDraft" type="button">清除本页草稿</button>
+  <button id="download" type="button">导出 HTML</button>
+  <span id="status" class="status"></span>
+  <span class="hint" id="hint">文字修改会自动保存为本机草稿；导出后，用下载文件覆盖 site/ 中的同名 HTML。</span>
+</div>
+<div class="workspace">
+  <div class="preview-area">
+    <div id="previewShell" class="preview-shell"><iframe id="preview" class="frame" src="index.html"></iframe></div>
+  </div>
+  <aside id="imagePanel" class="image-panel" aria-label="图片编辑面板">
+    <div id="imagePanelEmpty" class="empty-panel">进入“图片模式”后，点击页面中的图片即可编辑。<br><br>支持：替换图片、Cover / Contain、水平与垂直位置调整。</div>
+    <div id="imageControls" hidden>
+      <h2>图片设置</h2>
+      <p class="panel-sub">修改只作用于当前选中的图片，不会改变页面结构。</p>
+      <div class="image-preview"><img id="panelPreview" alt="当前图片预览"></div>
+      <div class="field"><label>当前资源路径</label><div id="originalPath" class="path-box"></div></div>
+      <div class="field"><label for="fitSelect">显示方式</label><select id="fitSelect"><option value="">跟随页面样式</option><option value="cover">Cover — 填满并裁切</option><option value="contain">Contain — 完整显示</option></select></div>
+      <div class="field"><label for="posX">水平位置</label><div class="range-row"><input id="posX" type="range" min="0" max="100" value="50"><span id="posXValue" class="range-value">50%</span></div></div>
+      <div class="field"><label for="posY">垂直位置</label><div class="range-row"><input id="posY" type="range" min="0" max="100" value="50"><span id="posYValue" class="range-value">50%</span></div></div>
+      <label class="file-button">选择替换图片<input id="replaceFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label>
+      <div class="field" style="margin-top:12px"><label>导出后目标路径</label><div id="targetPath" class="path-box"></div></div>
+      <div class="image-actions"><button id="downloadReplacement" type="button" disabled>下载替换图</button><button id="resetImage" type="button">恢复原图</button></div>
+      <div class="image-warning">替换图片时：先导出 HTML，再点“下载替换图”，并把下载的图片放到上面显示的目标路径。若只调整 Cover / Contain / 位置，则只需导出 HTML。</div>
+    </div>
+  </aside>
+</div>
+<script src="js/editor.js"></script>
+</body></html>

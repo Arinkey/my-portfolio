@@ -1,0 +1,262 @@
+/* Global responsive + subtle interaction layer. Loaded after each project's own stylesheet. */
+:root{
+  --ambient-rgb: 120, 125, 130;
+  --ambient-opacity: .055;
+  --reveal-distance: 18px;
+}
+body.project-dark{--ambient-rgb:132,108,88;--ambient-opacity:.055}
+body.project-gullen{--ambient-rgb:245,124,200;--ambient-opacity:.055}
+body.project-six{--ambient-rgb:183,94,79;--ambient-opacity:.040}
+body.project-rigged{--ambient-rgb:239,122,26;--ambient-opacity:.070}
+body.project-anthropolo{--ambient-rgb:202,205,195;--ambient-opacity:.045}
+
+.ambient-layer{
+  position:fixed;
+  inset:-16vh -12vw;
+  z-index:-2;
+  pointer-events:none;
+  opacity:var(--ambient-opacity);
+  background:radial-gradient(circle at var(--ambient-x,50%) var(--ambient-y,28%),rgba(var(--ambient-rgb),.9) 0,rgba(var(--ambient-rgb),.32) 16%,transparent 45%);
+  transition:opacity .35s ease;
+  will-change:background;
+}
+
+/* automatic entrance motion */
+.reveal-auto{
+  opacity:0;
+  transform:translate3d(0,var(--reveal-distance),0);
+  transition:opacity .72s cubic-bezier(.2,.7,.2,1),transform .72s cubic-bezier(.2,.7,.2,1);
+  transition-delay:var(--reveal-delay,0ms);
+  will-change:opacity,transform;
+}
+.reveal-auto.is-visible{opacity:1;transform:translate3d(0,0,0)}
+
+/* images move only a little: enough to feel alive, not enough to become a showcase gimmick */
+.project-media img,
+.hero-visual img,
+.gullen-hero-image img,
+.six-door img,
+.rigged-v2-hero-collage img,
+.rigged-v2-compare img,
+.action-media img,
+.photo img,
+.stage-media img,
+.story-strip img,
+.map-compare img{
+  transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .45s ease,opacity .45s ease;
+}
+@media (hover:hover){
+  .project-media:hover img,
+  .rigged-v2-compare article:hover img,
+  .action-panel:hover .action-media img,
+  .photo:hover img{transform:scale(1.018)}
+}
+
+/* Mobile nav shared by the portfolio pages */
+.mobile-nav-toggle{
+  display:none;
+  border:0;
+  background:transparent;
+  color:inherit;
+  width:40px;
+  height:40px;
+  padding:8px;
+  cursor:pointer;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:5px;
+  margin-left:auto;
+}
+.mobile-nav-toggle span{display:block;width:20px;height:1px;background:currentColor;transition:transform .25s ease,opacity .25s ease}
+.mobile-nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.mobile-nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.mobile-nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+@media(max-width:1080px){
+  .site-header .nav{position:relative}
+  .site-header .mobile-nav-toggle{display:flex}
+  .site-header .nav-links{
+    display:none;
+    position:absolute;
+    top:calc(100% + 1px);
+    left:18px;
+    right:18px;
+    padding:16px 18px 18px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+    background:rgba(255,255,255,.97);
+    border:1px solid rgba(0,0,0,.08);
+    box-shadow:0 18px 40px rgba(0,0,0,.10);
+    backdrop-filter:blur(14px);
+  }
+  body.project-dark .site-header .nav-links{background:rgba(15,15,15,.97);border-color:rgba(255,255,255,.10)}
+  body.project-gullen .site-header .nav-links{background:rgba(247,245,240,.98)}
+  body.project-six .site-header .nav-links{background:rgba(241,241,239,.98)}
+  body.project-rigged .site-header .nav-links{background:rgba(255,246,234,.98)}
+  .site-header.nav-open .nav-links{display:flex}
+  .site-header.nav-open .nav-links a{display:block!important}
+  .site-header .lang{padding-top:7px;border-top:1px solid rgba(120,120,120,.18);width:100%}
+}
+
+/* Anthropolo uses a different navigation shell but the same responsive behavior */
+@media(max-width:920px){
+  body.project-anthropolo .top-nav-inner{position:relative}
+  body.project-anthropolo .top-nav .mobile-nav-toggle{display:flex;color:#ddd}
+  body.project-anthropolo .top-nav .nav-links{
+    display:none;
+    position:absolute;
+    top:calc(100% + 1px);
+    left:0;
+    right:0;
+    padding:16px 4vw 20px;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+    background:rgba(8,11,11,.97);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    box-shadow:0 18px 42px rgba(0,0,0,.24);
+  }
+  body.project-anthropolo .top-nav.nav-open .nav-links{display:flex}
+  body.project-anthropolo .top-nav .nav-links a{display:block!important}
+}
+
+/* extra small-screen safeguards */
+html,body{max-width:100%;overflow-x:hidden}
+@media(max-width:720px){
+  :root{--reveal-distance:12px}
+  .page{padding-left:18px!important;padding-right:18px!important}
+  .hero{gap:32px!important}
+  .project{gap:30px!important}
+  .project-media{min-height:0!important}
+  .project-copy p{max-width:none!important}
+  .meta{gap:18px 22px!important}
+  .gullen-title-row,.six-title-row,.rigged-v2-title-row{padding-top:34px!important}
+  .gullen-title,.six-title,.rigged-v2-title{overflow-wrap:anywhere}
+  .rigged-v2-tag{max-width:100%!important}
+  .rigged-v2-hero-collage .hero-inset{width:74%!important}
+  .rigged-v2-compare article,.rigged-v2-stat-grid .stat-card{padding:24px 20px!important}
+  .six-change-row{padding:42px 0!important}
+  body.project-anthropolo{font-size:16px}
+  body.project-anthropolo .wrap{width:min(94vw,100%)!important}
+  body.project-anthropolo .hero-grid{gap:26px!important}
+  body.project-anthropolo .stages-top{grid-template-columns:1fr!important}
+  body.project-anthropolo .wide-stage{grid-template-columns:1fr!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  .reveal-auto{opacity:1!important;transform:none!important;transition:none!important}
+  .project-media img,.hero-visual img,.gullen-hero-image img,.six-door img,.rigged-v2-hero-collage img,.rigged-v2-compare img,.action-media img,.photo img,.stage-media img,.story-strip img,.map-compare img{transition:none!important;transform:none!important}
+  .ambient-layer{display:none}
+}
+
+/* ===== V18 project-specific motion ===== */
+
+/* Khan-Bong: one-shot depth shift and lantern breathing */
+body.project-dark .kb-parallax-once{
+  transform:translate3d(0,var(--kb-start-y,24px),0) scale(1.022);
+  transform-origin:center;
+  transition:transform 1.05s cubic-bezier(.18,.78,.2,1),filter .45s ease;
+  will-change:transform;
+}
+body.project-dark .kb-parallax-once.kb-parallax-settle{
+  transform:translate3d(0,0,0) scale(1);
+}
+body.project-dark .media-wide,body.project-dark .media-two figure{overflow:hidden}
+body.project-dark .kb-breathe{
+  animation:kbBreath 4.8s ease-in-out infinite;
+}
+@keyframes kbBreath{
+  0%,100%{filter:brightness(.95) contrast(1.02);box-shadow:0 18px 50px rgba(0,0,0,.28)}
+  50%{filter:brightness(1.06) contrast(1.04);box-shadow:0 18px 56px rgba(86,47,30,.22)}
+}
+
+/* Gullen: pink editorial wipes */
+body.project-gullen .gullen-wipe{position:relative;overflow:hidden}
+body.project-gullen .gullen-wipe::after{
+  content:"";position:absolute;inset:0;background:var(--gullen-pink);z-index:3;
+  transform:scaleX(1);transform-origin:right center;
+  transition:transform .82s cubic-bezier(.77,0,.18,1);
+  transition-delay:var(--wipe-delay,0ms);pointer-events:none;
+}
+body.project-gullen .gullen-wipe.wipe-on::after{transform:scaleX(0)}
+body.project-gullen .gullen-label-motion{
+  opacity:0;transform:translateX(-14px);
+  transition:opacity .5s ease,transform .55s cubic-bezier(.2,.8,.2,1);
+  transition-delay:var(--label-delay,0ms)
+}
+body.project-gullen .gullen-label-motion.label-on{opacity:1;transform:none}
+
+/* 6 Mornings: memory arrives blurred and slightly displaced */
+body.project-six .six-memory-reveal{
+  filter:grayscale(1) blur(6px) brightness(1.08)!important;
+  opacity:.72;
+  transform:scale(1.018);
+  transition:filter 1.05s ease,opacity .9s ease,transform 1.05s cubic-bezier(.2,.75,.2,1)!important;
+  transition-delay:var(--memory-delay,0ms)!important;
+}
+body.project-six .six-memory-reveal.memory-clear{
+  filter:grayscale(1) blur(0) brightness(1)!important;
+  opacity:1;transform:scale(1)
+}
+body.project-six .six-memory-offset{
+  transform:translateX(var(--memory-x,0px));opacity:.82;
+  transition:transform .95s cubic-bezier(.2,.75,.2,1),opacity .85s ease;
+}
+body.project-six .six-memory-offset.memory-settle{transform:translateX(0);opacity:1}
+
+/* Rigged Champion: small, energetic motion */
+body.project-rigged .hero-inset{
+  translate:var(--rigged-shift,0px 0px);
+  transition:translate .18s ease-out,transform .35s ease;
+  will-change:translate;
+}
+body.project-rigged .hero-stamp{
+  translate:var(--rigged-stamp-shift,0px 0px);
+  transition:translate .18s ease-out,transform .35s ease;
+  will-change:translate;
+}
+body.project-rigged .rigged-pop{
+  opacity:0;transform:scale(.88) rotate(-2deg);
+  transition:opacity .38s ease,transform .5s cubic-bezier(.18,.9,.25,1.18);
+  transition-delay:var(--pop-delay,0ms)
+}
+body.project-rigged .rigged-pop.pop-on{opacity:1;transform:scale(1) rotate(0)}
+@media(hover:hover){
+  body.project-rigged .action-panel{transition:transform .28s ease,box-shadow .28s ease}
+  body.project-rigged .action-panel:hover{transform:translateY(-5px) rotate(.35deg);box-shadow:0 18px 38px rgba(124,68,22,.11)}
+}
+
+/* Anthropolo uses only its original reveal / fog-forest visual treatment. */
+
+@media(prefers-reduced-motion:reduce){
+  body.project-dark .kb-parallax-once{transform:none!important;transition:none!important}
+  body.project-dark .kb-breathe{animation:none!important}
+  body.project-gullen .gullen-wipe::after{display:none!important}
+  body.project-gullen .gullen-label-motion,
+  body.project-six .six-memory-reveal,
+  body.project-six .six-memory-offset,
+  body.project-rigged .rigged-pop{opacity:1!important;transform:none!important;transition:none!important;filter:none!important}
+}
+
+/* ===== V23 Rigged Champion: one-shot juicy shake ===== */
+body.project-rigged .rigged-juice{will-change:translate,rotate,scale,filter}
+body.project-rigged .rigged-juice.juice-once{
+  animation:riggedJuiceShake .72s cubic-bezier(.2,.9,.22,1.12) var(--juice-delay,0ms) 1;
+}
+@keyframes riggedJuiceShake{
+  0%{translate:0 0;rotate:0deg;scale:1;filter:saturate(1) brightness(1)}
+  12%{translate:-8px 2px;rotate:-1.7deg;scale:1.018;filter:saturate(1.16) brightness(1.05)}
+  25%{translate:9px -3px;rotate:1.8deg;scale:.994}
+  38%{translate:-6px 2px;rotate:-1.15deg;scale:1.012}
+  52%{translate:5px -2px;rotate:.82deg;scale:1.004}
+  67%{translate:-3px 1px;rotate:-.42deg;scale:1.007}
+  82%{translate:2px 0;rotate:.18deg;scale:1.002}
+  100%{translate:0 0;rotate:0deg;scale:1;filter:saturate(1) brightness(1)}
+}
+body.project-rigged .rigged-juice.juice-once-done{will-change:auto}
+@media(prefers-reduced-motion:reduce){
+  body.project-rigged .rigged-juice{animation:none!important;translate:0!important;rotate:0!important;scale:1!important}
+}
