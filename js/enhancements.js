@@ -27,7 +27,7 @@
   if (!body.classList.contains('project-anthropolo') && !body.classList.contains('project-dark')) {
     const selectors = [
       '.hero > *', '.project', '.project-hero-grid > *', '.long-section > *',
-      '.gullen-rule > *', '.six-rule > *', '.rigged-v2-section > *'
+      '.gullen-rule > *', '.six-rule > *', '.rigged-v2-section > *', '.nw-hero > *', '.nw-section-head', '.nw-project', '.nw-character'
     ];
     const targets = [...document.querySelectorAll(selectors.join(','))]
       .filter((el, i, arr) => arr.indexOf(el) === i);
